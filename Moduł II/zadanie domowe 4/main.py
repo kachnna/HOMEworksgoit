@@ -19,36 +19,6 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     pass
 
 
-def _write_to_json(message_data):
-    if not os.path.exists('storage'):
-        os.makedirs('storage')
-        print("Folder 'storage' was created")
-
-    timestamp = message_data['timestamp']
-    data_to_write = {timestamp: {
-        'username': message_data['username'], 'message': message_data['message']}}
-
-    with open(DATA_FILE_PATH, 'a') as file:
-        json.dump(data_to_write, file, indent=2)
-        file.write('\n')
-
-
-def _process_form(data):
-    messages = []
-    if 'username' in data and 'message' in data:
-        username = data['username'][0]
-        message = data['message'][0]
-        timestamp = datetime.now().isoformat()
-
-        message_data = {
-            'username': username,
-            'message': message,
-            'timestamp': timestamp
-        }
-        messages.append(message_data)
-        _write_to_json(message_data)
-
-
 class HTTPHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         pr_url = urllib.parse.urlparse(self.path)
@@ -65,10 +35,10 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length).decode('utf-8')
+        post_data = self.rfile.read(content_length)
         print(post_data)
 
-        _process_form(urllib.parse.parse_qs(post_data))
+        socket_run_client(HOST, SOCKET_PORT, post_data)
 
         self.send_response(302)
         self.send_header('Location', '/')
@@ -93,39 +63,77 @@ class HTTPHandler(BaseHTTPRequestHandler):
             self.wfile.write(file.read())
 
 
-class SocketServerThread(threading.Thread):
-    def __init__(self, host, port):
-        super().__init__()
-        self.host = host
-        self.port = port
-
-    def run(self):
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-            sock.bind((self.host, self.port))
-            print(f"Socket server listening on {self.host}:{self.port}")
-            while True:
-                data, addr = sock.recvfrom(1024)
-                print(f"Received data: {data}")
-
-
-def main():
+def run():
     http_server = ThreadedHTTPServer((HOST, HTTP_PORT), HTTPHandler)
     http_thread = threading.Thread(target=http_server.serve_forever)
     http_thread.daemon = True
     http_thread.start()
     print(f"HTTP server listening on {HOST}:{HTTP_PORT}")
-
-    socket_server_thread = SocketServerThread(HOST, SOCKET_PORT)
-    socket_server_thread.daemon = True
-    socket_server_thread.start()
-
-    print("Servers started successfully!")
-
     try:
         http_server.serve_forever()
     except KeyboardInterrupt:
         http_server.server_close()
 
 
-if __name__ == "__main__":
+def storage_folder():
+    if not os.path.exists('storage'):
+        os.makedirs('storage')
+        print("Folder 'storage' was created")
+    data_file_path = os.path.join('storage', 'data.json')
+    if not os.path.exists(data_file_path):
+        with open(data_file_path, 'w') as f:
+            f.write('{}')
+        print("File 'data.json' was created")
+
+
+def socket_run_client(ip=HOST, port=SOCKET_PORT, data=b""):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server = ((ip, port))
+    for i in range(0, len(data), 1024):
+        data_part = data[i: i + 1024]
+        sock.sendto(data_part, (ip, port))
+    sock.sendto(b"END", server)
+    sock.close()
+
+
+def socket_run_server(ip=HOST, port=SOCKET_PORT):
+    storage_folder()
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server = ((ip, port))
+    sock.bind(server)
+    to_save = b""
+    file_name = './storage/data.json'
+    try:
+        while True:
+            data, address = sock.recvfrom(1024)
+            if data == b"END":
+                to_save_parse = urllib.parse.unquote_plus(to_save.decode())
+                data_dict = {key: value for key, value in [
+                    el.split('=') for el in to_save_parse.split('&')]}
+                with open(file_name, "r") as fh:
+                    json_dict = json.load(fh)
+                json_dict[str(datetime.now())] = data_dict
+                with open(file_name, "w") as fh:
+                    json.dump(json_dict, fh)
+                to_save = b""
+            else:
+                to_save += data
+    except KeyboardInterrupt:
+        print(f'Destroy server')
+    finally:
+        sock.close()
+
+
+def main():
+    http_server = threading.Thread(target=run)
+    socket_server = threading.Thread(
+        target=socket_run_server, args=(HOST, SOCKET_PORT))
+    socket_server.start()
+    http_server.start()
+    socket_server.join()
+    http_server.join()
+    print("Servers started successfully!")
+
+
+if __name__ == '__main__':
     main()
