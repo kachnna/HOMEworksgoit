@@ -1,5 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
+from jinja2 import Environment, FileSystemLoader
+import json
 import mimetypes
 import pathlib
 import aiohttp
@@ -8,7 +10,7 @@ from datetime import datetime, timedelta
 import asyncio
 import sys
 import platform
-import template_index
+
 
 HOST = '127.0.0.1'
 HTTP_PORT = 3000
@@ -74,12 +76,6 @@ def url_generate(currency, delta):
     return url
 
 
-async def get_data():
-    async with aiohttp.ClientSession() as session:
-        results = await asyncio.gather(open_page(url_generate("EUR", sys.argv[1]), session), open_page(url_generate("USD", sys.argv[1]), session))
-        template_index.main(results)
-
-
 async def open_page(url, session):
     try:
         async with session.get(url) as response:
@@ -90,6 +86,32 @@ async def open_page(url, session):
                 print(f"Error status: {response.status} for {url}")
     except aiohttp.ClientConnectionError as error:
         print(f"Connection error: {url}", str(error))
+
+
+async def get_data():
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(open_page(url_generate("EUR", sys.argv[1]), session), open_page(url_generate("USD", sys.argv[1]), session))
+        procces_data(results)
+
+
+def procces_data(data):
+    env = Environment(loader=FileSystemLoader('.'))
+    template = env.get_template("template.html")
+
+    EUR = data[0]
+    USD = data[1]
+
+    data_EUR = json.loads(EUR)
+    rates_EUR = sorted(data_EUR["rates"],
+                       key=lambda x: x["effectiveDate"], reverse=True)
+
+    data_USD = json.loads(USD)
+    rates_USD = sorted(data_USD["rates"],
+                       key=lambda x: x["effectiveDate"], reverse=True)
+    output = template.render(rates_EUR=rates_EUR, rates_USD=rates_USD)
+
+    with open("index.html", "w", encoding='utf-8') as fh:
+        fh.write(output)
 
 
 if __name__ == '__main__':
