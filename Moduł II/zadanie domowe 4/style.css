@@ -67,6 +67,9 @@ body {
       font-size: 1rem;;
 }
 
+.centered-content {
+  text-align: center;
+}
 .nav-link:hover {
   background-color: #f36d00;
 
