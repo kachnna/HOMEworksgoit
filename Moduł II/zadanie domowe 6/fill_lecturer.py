@@ -34,3 +34,6 @@ def create_data(conn, data) -> None:
 def create_lecturers(conn, numbers):
     create_data(conn, prepare_date(generate_fake_data(numbers)))
 
+
+if __name__ == "__main__":
+    print(prepare_date(generate_fake_data(8)))

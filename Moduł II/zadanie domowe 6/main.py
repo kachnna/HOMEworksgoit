@@ -1,5 +1,5 @@
 import sqlite3
-import os
+from tabulate import tabulate
 from connect import create_connection
 from data import database, GROUPS_N, GRADES_N, STUDENTS_N, SUBJECTS, LECTURERS_N, QUERYS
 from fill_grades import create_grades
@@ -34,27 +34,15 @@ def get_query(conn, sql_query):
 
 
 if __name__ == "__main__":
-    if os.path.exists(database):
-        response = input(
-            "You already have a file called 'school.db'. Do you need to fill it with data? (yes/no): ")
-        if response.lower() in ["yes", "y", "true"]:
-            fill_data = True
-        else:
-            fill_data = False
-    else:
-        fill_data = True
     with create_connection(database) as conn:
         if conn is not None:
             create_db(conn)
-            print(f"I created file {database}.")
-            if fill_data:
-                insert_data_to_db(conn)
-                print(f"Inserted data into the {database}.")
+            print(f"I have connection with file {database}.")
+            insert_data_to_db(conn)
+            print(f"Inserted data into the {database}.")
         else:
             print("I cannot create the database connection.")
-
-        while (True):
-            print("""
+        print("""
                     Query 1: 5 uczniów z najwyższą średnią ocen ze wszystkich przedmiotów.
                     Query 2: Uczeń z najwyższą średnią ocen z wybranego przedmiotu.
                     Query 3: Średnia ocen w grupach dla wybranego przedmiotu.
@@ -66,11 +54,15 @@ if __name__ == "__main__":
                     Query 9: Lista kursów, na które uczęszcza uczeń.
                     Query 10: Lista kursów prowadzonych przez wybranego wykładowcę dla określonego ucznia.
                     """)
+        while (True):
             choice = input("Choose number of guery: ")
             if choice in QUERYS.keys():
                 print(f"\n{QUERYS[choice][1]}\n")
-                for tuple in get_query(conn, QUERYS[choice][0]):
-                    print(tuple)
+                results = get_query(conn, QUERYS[choice][0])
+                if results:
+                    print(tabulate(results, tablefmt="grid"))
+                else:
+                    print("No results.")
             else:
                 print(
                     "\nYou have entered an incorrect inquiry number. Enter a value from 1 to 10.")

@@ -1,12 +1,18 @@
 from sqlite3 import Error
+import random
 
 
 def generate_data(numbers) -> list:
+    components = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Theta',
+                  'Math', 'Science', 'Physics', 'Chemistry', 'Biology', 'Literature',
+                  'History', 'Geography', 'Art', 'Music', 'Drama', 'Computer',
+                  'Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Purple', 'Pink',
+                  'Lions', 'Tigers', 'Bears', 'Wolves', 'Eagles', 'Falcons', 'Owls']
+
     fake_groups = []
-    for i in range(numbers):
-        letter = 'ABCDEFGHIJKLMNOPQRSTUWYZ'
-        template_name = f"2022/2023-{letter[i]}"
-        fake_groups.append(template_name)
+    for _ in range(numbers):
+        group_name = ' '.join(random.sample(components, random.randint(2, 3)))
+        fake_groups.append(group_name)
     return fake_groups
 
 
@@ -35,3 +41,5 @@ def create_groups(conn, numbers):
     create_data(conn, prepare_date(generate_data(numbers)))
 
 
+if __name__ == "__main__":
+    print(prepare_date(generate_data(3)))
