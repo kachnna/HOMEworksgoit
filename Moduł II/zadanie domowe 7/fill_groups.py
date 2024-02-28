@@ -17,7 +17,7 @@ def generate_data(numbers) -> list:
 
 def create_data(data) -> None:
     for groups in data:
-        fake_groups = Group(name=groups[0])
+        fake_groups = Group(name=groups)
         session.add(fake_groups)
     session.commit()
 
@@ -25,4 +25,7 @@ def create_data(data) -> None:
 def create_groups(numbers):
     create_data(generate_data(numbers))
 
+
+if __name__ == "__main__":
+    print(generate_data(6))
 

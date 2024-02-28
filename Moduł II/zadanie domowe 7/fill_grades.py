@@ -5,7 +5,7 @@ from models import Grade
 from data import SUBJECTS_N, STUDENTS_N
 
 
-def prepare_date(number) -> list:
+def prepare_data(number) -> list:
     for_data = []
 
     for i in range(number):
@@ -22,10 +22,15 @@ def prepare_date(number) -> list:
 
 def create_data(data) -> None:
     for grades in data:
-        fake_grades = Grade(grade=grades[0], student_id=grades[1],subject_id=grades[2],created_at=grades[3])
+        fake_grades = Grade(
+            grade=grades[0], student_id=grades[1], subject_id=grades[2], created_at=grades[3])
         session.add(fake_grades)
     session.commit()
 
 
 def create_grades(number):
-    create_data(prepare_date(number))
+    create_data(prepare_data(number))
+
+
+if __name__ == "__main__":
+    print(prepare_data(6))

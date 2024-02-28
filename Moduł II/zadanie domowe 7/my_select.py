@@ -147,14 +147,14 @@ def select_10():
 
 
 QUERYS = {
-    "1": [select_1, "Query 1: 5 uczniów z najwyższą średnią ocen ze wszystkich przedmiotów."],
-    "2": [select_2, "Query 2: Uczeń z najwyższą średnią ocen z wybranego przedmiotu."],
-    "3": [select_3, "Query 3: Średnia ocen w grupach dla wybranego przedmiotu."],
-    "4": [select_4, "Query 4: Średnia ocen dla wszystkich grup, uwzględniając wszystkie oceny."],
-    "5": [select_5, "Query 5: Przedmioty, które prowadzi wybrany wykładowca."],
-    "6": [select_6, "Query 6: Lista uczniów w wybranej grupie."],
-    "7": [select_7, "Query 7: Oceny uczniów w wybranej grupie z określonego przedmiotu."],
-    "8": [select_8, "Query 8: Średnia ocen wystawionych przez wykładowcę z danego przedmiotu."],
-    "9": [select_9, "Query 9: Lista kursów, na które uczęszcza uczeń."],
-    "10": [select_10, "Query 10: Lista kursów prowadzonych przez wybranego wykładowcę dla określonego ucznia."],
+    "1": [select_1(), "Query 1: 5 uczniów z najwyższą średnią ocen ze wszystkich przedmiotów."],
+    "2": [select_2(), "Query 2: Uczeń z najwyższą średnią ocen z wybranego przedmiotu."],
+    "3": [select_3(), "Query 3: Średnia ocen w grupach dla wybranego przedmiotu."],
+    "4": [select_4(), "Query 4: Średnia ocen dla wszystkich grup, uwzględniając wszystkie oceny."],
+    "5": [select_5(), "Query 5: Przedmioty, które prowadzi wybrany wykładowca."],
+    "6": [select_6(), "Query 6: Lista uczniów w wybranej grupie."],
+    "7": [select_7(), "Query 7: Oceny uczniów w wybranej grupie z określonego przedmiotu."],
+    "8": [select_8(), "Query 8: Średnia ocen wystawionych przez wykładowcę z danego przedmiotu."],
+    "9": [select_9(), "Query 9: Lista kursów, na które uczęszcza uczeń."],
+    "10": [select_10(), "Query 10: Lista kursów prowadzonych przez wybranego wykładowcę dla określonego ucznia."],
 }
