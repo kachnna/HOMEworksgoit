@@ -3,7 +3,7 @@ services:
   python-app:
     image: python:3.11
     volumes:
-      - .:/app
+      - /.:/app
     working_dir: /app
     command: python -i main.py
     stdin_open: true
