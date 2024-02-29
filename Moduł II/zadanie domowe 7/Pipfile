@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+tabulate = "==0.9.0"
+Faker = "==23.2.1"
+alembic= "==1.13.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

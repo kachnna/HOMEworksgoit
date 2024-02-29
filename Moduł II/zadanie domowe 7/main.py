@@ -25,10 +25,16 @@ if __name__ == "__main__":
         choice_2 = input("Choose number of query: ")
         if choice_2 in QUERYS.keys():
             results = QUERYS[choice_2][0]
-            if results:
+            if isinstance(results, list) and results:
                 print(tabulate(results, tablefmt="grid"))
+            elif isinstance(results, tuple):
+                result_list = [list(results)]
+                print(tabulate(result_list, tablefmt="grid"))
             else:
                 print("No results.")
+        elif choice_2.lower() in ["end", "exit", "."]:
+            print("\nGood bye!\n")
+            break
         else:
             print(
                 "\nYou have entered an incorrect inquiry number. Enter a value from 1 to 10.")
