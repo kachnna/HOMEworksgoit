@@ -39,7 +39,7 @@ class Subject(Base):
 class Grade(Base):
     __tablename__ = 'grades'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    grade = Column(String)
+    grades = Column(String)
     student_id = Column(Integer, ForeignKey(
         'students.id', onupdate="CASCADE", ondelete="CASCADE"))
     student = relationship(

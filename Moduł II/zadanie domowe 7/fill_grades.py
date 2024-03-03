@@ -21,9 +21,9 @@ def prepare_data(number) -> list:
 
 
 def create_data(data) -> None:
-    for grades in data:
+    for grades_fake in data:
         fake_grades = Grade(
-            grade=grades[0], student_id=grades[1], subject_id=grades[2], created_at=grades[3])
+            grades=grades_fake[0], student_id=grades_fake[1], subject_id=grades_fake[2], created_at=grades_fake[3])
         session.add(fake_grades)
     session.commit()
 
