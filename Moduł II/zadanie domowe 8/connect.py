@@ -16,3 +16,5 @@ try:
     print("You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
+
+# mongodb+srv://katarzynaczempiel:Vakarian7!@cluster0.rzxrwwx.mongodb.net/?retryWrites=true&w=majority
