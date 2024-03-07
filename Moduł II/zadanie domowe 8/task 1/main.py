@@ -56,6 +56,7 @@ OPERATIONS_MAP = {
     "tags": show_quotes_by_tags
 }
 
+
 def main():
     choice = input("Do you want to fill mongo database with data?(Y/N) ")
     if choice.lower().strip() in ["y", "yes"]:
@@ -68,7 +69,7 @@ def main():
           exit — zamknij skrypt;"""
           )
     while True:
-        user_input = input("\nEnter command: ")
+        user_input = input("\nEnter command\n ")
         if user_input.lower() == "exit":
             break
         input_splitted = user_input.split(":")
@@ -86,6 +87,6 @@ def main():
         else:
             print("Invalid command format. Please try again.")
 
-    
+
 if __name__ == "__main__":
     main()

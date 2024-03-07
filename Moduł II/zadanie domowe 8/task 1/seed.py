@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from connect import client
 
+
 def read_json_data(file_path):
     with open(file_path, "r", encoding="UTF-8") as fh:
         readable_data = json.load(fh)
@@ -9,7 +10,7 @@ def read_json_data(file_path):
 
 
 def save_data_to_mongodb(authors, quotes, db):
-    database = db["mydatabase"]
+    database = db["database"]
     authors_collection = database["authors"]
     quotes_collection = database["quotes"]
 
@@ -32,11 +33,10 @@ def save_data_to_mongodb(authors, quotes, db):
 
 
 def seed_mongo_db():
-    authors_file_path = "authors.json"
-    quotes_file_path = "quotes.json"
+    authors_file_path = "./task 1/authors.json"
+    quotes_file_path = "./task 1/quotes.json"
 
     authors_data = read_json_data(authors_file_path)
     quotes_data = read_json_data(quotes_file_path)
 
     save_data_to_mongodb(authors_data, quotes_data, client)
-

@@ -1,6 +1,6 @@
 from pymongo.mongo_client import MongoClient
 import configparser
-
+from mongoengine import connect
 
 def get_mongo_client():
     config = configparser.ConfigParser()
@@ -22,3 +22,7 @@ def get_mongo_client():
         print(e)
 
     return client
+
+def host_connect():
+    host = 'mongodb://localhost:27017/mydatabase'
+    connect(host=host, alias='default')

@@ -1,16 +1,12 @@
 import pika
 import json
 from faker import Faker
-from connect import get_mongo_client
+from connect import get_mongo_client, host_connect
 from contact import Contact
-from mongoengine import connect
 
-host = 'mongodb://localhost:27017/mydatabase'
-connect(host=host, alias='default')
-
+host_connect()
 
 def producer_run():
-    mongo_client = get_mongo_client()
 
     credentials = pika.PlainCredentials('guest', 'guest')
     connection = pika.BlockingConnection(pika.ConnectionParameters(
@@ -26,14 +22,11 @@ def producer_run():
         contact = Contact(name=name, email=email)
         contact.save()
 
-        message = {'contact_id': str(contact.id), 'name': str(name), 'email':str(email)}
+        message = {'contact_id': str(contact.id)}
         channel.basic_publish(
             exchange='', routing_key='contact_queue', body=json.dumps(message))
 
-    print("Contacts sent to the queue")
+    print("[*] Contacts sent to the queue")
 
     connection.close()
 
-
-if __name__ == "__main__":
-    producer_run()

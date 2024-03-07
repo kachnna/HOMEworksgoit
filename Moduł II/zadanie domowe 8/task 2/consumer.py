@@ -1,21 +1,36 @@
 import pika
-from connect import get_mongo_client
+from connect import get_mongo_client, host_connect
 from contact import Contact
+import json
+
+host_connect()
+
+
+def send_email(contact_id):
+    print(f"Sent email to contact with ID: {contact_id}")
 
 
 def callback(ch, method, properties, body):
-    print("Received message:", body)
+    print("\n[x] Received message:", body)
+    contact_id = json.loads(body)['contact_id']
+    contact = Contact.objects.get(id=contact_id)
+    send_email(contact.email)
+    contact = Contact.objects.get(id=contact_id)
+    contact.email_sent = True
+    contact.save()
+
+    print(f"Marked contact with ID {contact_id} as email sent.")
 
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 def consume_messages():
-    mongo_client = get_mongo_client()
 
     credentials = pika.PlainCredentials('guest', 'guest')
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='localhost', port=5672, credentials=credentials))
     channel = connection.channel()
+
     channel.queue_declare(queue='contact_queue')
 
     channel.basic_qos(prefetch_count=1)

@@ -2,7 +2,7 @@ from pymongo.mongo_client import MongoClient
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('./task 1/config.ini')
 
 mongo_user = config.get('DB', 'user')
 mongodb_pass = config.get('DB', 'pass')
