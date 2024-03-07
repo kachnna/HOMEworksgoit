@@ -1,4 +1,4 @@
-from mongoengine import connect
+from pymongo.mongo_client import MongoClient
 import configparser
 
 config = configparser.ConfigParser()
@@ -9,12 +9,12 @@ mongodb_pass = config.get('DB', 'pass')
 db_name = config.get('DB', 'db_name')
 domain = config.get('DB', 'domain')
 
+uri = f"mongodb+srv://{mongo_user}:{mongodb_pass}@{db_name}.{domain}/?retryWrites=true&w=majority"
+
+client = MongoClient(uri)
 
 try:
-    connect(
-        host=f"""mongodb+srv://{mongo_user}:{mongodb_pass}@{domain}/{db_name}?retryWrites=true&w=majority""", ssl=True)
-    print("You successfully connected to MongoDB!")
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
-
-# mongodb+srv://katarzynaczempiel:Vakarian7!@cluster0.rzxrwwx.mongodb.net/?retryWrites=true&w=majority

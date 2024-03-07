@@ -1,6 +1,7 @@
 from models import Quote, Author
-from seed import seed_mongo_db
+from seed import seed_mongo_db, save_data_to_mongodb
 import connect
+from config import *
 
 
 def show_quotes_of(value):
@@ -28,13 +29,25 @@ def show_quotes_by_tag(value):
 
 
 def show_quotes_by_tags(values):
-    quotes = Quote.objects(tags__in=values)
-    if quotes:
-        print(f"\nQuotes with tags: {', '.join(values)}")
-        for quote in quotes:
-            print(f"Quote: {quote.quote}")
-    else:
-        print(f"Sorry, there are no quotes with the tags {', '.join(values)}.")
+    try:
+        tags = values.split(',')
+        unique_quotes = set()
+        quotes = Quote.objects(tags__name__in=tags)
+
+        if quotes:
+            print(f"\nQuotes with tags: {', '.join(tags)}")
+            print("-"*20)
+            for quote in quotes:
+                unique_quotes.add(quote.quote)
+
+            for quote in unique_quotes:
+                print(f"Quote: {quote}")
+        else:
+            print(
+                f"Sorry, there are no quotes with the tags {', '.join(tags)}.")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
 
 OPERATIONS_MAP = {
@@ -44,9 +57,9 @@ OPERATIONS_MAP = {
 }
 
 if __name__ == "__main__":
-    # choice = input("Do you want to fill mongo database with data? ")
-    # if choice in ["y", "Y", "Yes", "yes"]:
-    #     # seed_mongo_db()
+    choice = input("Do you want to fill mongo database with data?(Y/N) ")
+    if choice.lower().strip() in ["y", "Y", "Yes", "yes"]:
+        seed_mongo_db()
     print("""
           Enter command name, tag or tags.
           name: Steve Martin — znajdź i zwróć listę wszystkich cytatów autora Steve Martin;

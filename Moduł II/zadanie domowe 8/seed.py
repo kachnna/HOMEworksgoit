@@ -1,8 +1,6 @@
 import json
-from models import Author, Quote, Tag
 from datetime import datetime
-import connect
-
+from connect import client
 
 def read_json_data(file_path):
     with open(file_path, "r", encoding="UTF-8") as fh:
@@ -10,30 +8,35 @@ def read_json_data(file_path):
     return readable_data
 
 
-def save_data_to_mongodb(authors, quotes):
+def save_data_to_mongodb(authors, quotes, db):
+    database = db["mydatabase"]
+    authors_collection = database["authors"]
+    quotes_collection = database["quotes"]
 
     for author in authors:
-        author_obj = Author()
-        author_obj.fullname = author["fullname"]
-        author_obj.born_date = datetime.strptime(
-            author["born_date"], "%B %d, %Y").date()
-        author_obj.born_location = author["born_location"]
-        author_obj.description = author["description"]
-        author_obj.save()
+        born_date = datetime.strptime(author["born_date"], "%B %d, %Y")
+        author_id = authors_collection.insert_one({
+            "fullname": author["fullname"],
+            "born_date": born_date,
+            "born_location": author["born_location"],
+            "description": author["description"]
+        }).inserted_id
         for quote in quotes:
-            tags = []
             if quote["author"] == author["fullname"]:
-                for tag in quote["tags"]:
-                    tags.append(Tag(name=tag))
-                Quote(
-                    tags=tags,
-                    author=author_obj,
-                    quote=quote["quote"]
-                ).save()
+                tags = [{"name": tag} for tag in quote["tags"]]
+                quotes_collection.insert_one({
+                    "author_id": author_id,
+                    "quote": quote["quote"],
+                    "tags": tags
+                })
 
 
 def seed_mongo_db():
     authors_file_path = "authors.json"
     quotes_file_path = "quotes.json"
-    save_data_to_mongodb(read_json_data(authors_file_path),
-                         read_json_data(quotes_file_path))
+
+    authors_data = read_json_data(authors_file_path)
+    quotes_data = read_json_data(quotes_file_path)
+
+    save_data_to_mongodb(authors_data, quotes_data, client)
+

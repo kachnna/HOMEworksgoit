@@ -16,3 +16,4 @@ class Quote(Document):
     tags = ListField(EmbeddedDocumentField(Tag))
     author = ReferenceField(Author)
     quote = StringField()
+    meta = {"allow_inheritance": True}
