@@ -56,9 +56,9 @@ OPERATIONS_MAP = {
     "tags": show_quotes_by_tags
 }
 
-if __name__ == "__main__":
+def main():
     choice = input("Do you want to fill mongo database with data?(Y/N) ")
-    if choice.lower().strip() in ["y", "Y", "Yes", "yes"]:
+    if choice.lower().strip() in ["y", "yes"]:
         seed_mongo_db()
     print("""
           Enter command name, tag or tags.
@@ -85,3 +85,7 @@ if __name__ == "__main__":
                     f"No value provided for command: {command}. Please, try again.")
         else:
             print("Invalid command format. Please try again.")
+
+    
+if __name__ == "__main__":
+    main()
