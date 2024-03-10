@@ -33,8 +33,8 @@ def save_data_to_mongodb(authors, quotes, db):
 
 
 def seed_mongo_db():
-    authors_file_path = "./task 1/authors.json"
-    quotes_file_path = "./task 1/quotes.json"
+    authors_file_path = "./task1/authors.json"
+    quotes_file_path = "./task1/quotes.json"
 
     authors_data = read_json_data(authors_file_path)
     quotes_data = read_json_data(quotes_file_path)

@@ -4,7 +4,7 @@ from mongoengine import connect
 
 def get_mongo_client():
     config = configparser.ConfigParser()
-    config.read('./task 2/config.ini')
+    config.read('./task2/config.ini')
 
     mongo_user = config.get('DB', 'user')
     mongodb_pass = config.get('DB', 'pass')
