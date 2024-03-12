@@ -1,5 +1,5 @@
 from models import Quote, Author
-from seed import seed_mongo_db, save_data_to_mongodb
+from seed import seed_mongo_db
 import connect
 from config import *
 

@@ -1,12 +1,15 @@
 from seed import seed_mongo_db
-from commands import show_quotes_by_tag, show_quotes_by_tags, show_quotes_of
-import connect
+from commands import show_quotes_by_tag, show_quotes_by_tags, show_quotes_of, author_info, show_all_authors
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from Spider_class import AuthorsSpider, QuotesSpider
+from convertor import make_authors_json, make_quotes_json
+from file_paths import csv_path_authors, csv_path_quotes, json_path_authors, json_path_quotes
+import connect
 
 
 OPERATIONS_MAP = {
+    "author": author_info,
     "name": show_quotes_of,
     "tag": show_quotes_by_tag,
     "tags": show_quotes_by_tags
@@ -21,10 +24,14 @@ def main():
         process.crawl(AuthorsSpider)
         process.crawl(QuotesSpider)
         process.start()
+        make_authors_json(csv_path_authors, json_path_authors)
+        make_quotes_json(csv_path_quotes, json_path_quotes)
         seed_mongo_db()
 
     print("""
-          Enter command name, tag, or tags.
+          Enter command show all authors, author, name, tag, or tags.
+          show all authors - show all authors in database
+          author: Steve Martin - information about author
           name: Steve Martin — find and return a list of all quotes by author Steve Martin;
           tag: life — find and return a list of quotes for the tag 'life';
           tags: life,live — find and return a list of quotes that contain tags 'life' or 'live' (without spaces between tags);
@@ -47,6 +54,8 @@ def main():
             else:
                 print(
                     f"No value provided for command: {command}. Please, try again.")
+        elif command == "show all authors":
+            show_all_authors()
         else:
             print("Invalid command format. Please try again.")
 

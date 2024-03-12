@@ -1,11 +1,6 @@
 import scrapy
+from file_paths import csv_path_authors, csv_path_quotes
 
-
-csv_path_authors = "result/authors.csv"
-csv_path_quotes = "result/quotes.csv"
-
-json_file_path_authors = "./authors.json"
-json_file_path_quotes = "./quotes.json"
 
 
 class AuthorsSpider(scrapy.Spider):
