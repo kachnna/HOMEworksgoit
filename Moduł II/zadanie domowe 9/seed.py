@@ -1,4 +1,5 @@
 import json
+from models import Author, Quote, Tag
 from datetime import datetime
 from connect import client
 
@@ -15,26 +16,30 @@ def save_data_to_mongodb(authors, quotes, db):
     quotes_collection = database["quotes"]
 
     for author in authors:
-        born_date = datetime.strptime(author["born_date"], "%B %d, %Y")
-        author_record = {
-            "fullname": author["fullname"],
-            "born_date": born_date,
-            "born_location": author["born_location"],
-            "description": author["description"]
-        }
-        author_id = authors_collection.insert_one(author_record).inserted_id
+        try:
+            born_date = datetime.strptime(author["born_date"], "%B %d, %Y")
+        except ValueError:
+            continue
+        author_record = Author(
+            fullname=author["fullname"],
+            born_date=born_date,
+            born_location=author["born_location"],
+            description=author["description"]
+        )
 
-        author_quotes = [
-            quote for quote in quotes if quote["author"] == author["fullname"]]
-        for quote in author_quotes:
-            tags = [{"name": tag} for tag in quote["tags"]]
-            quote_record = {
-                "author_id": author_id,
-                "author": quote["author"],
-                "quote": quote["quote"],
-                "tags": tags
-            }
-            quotes_collection.insert_one(quote_record)
+        author_record.save
+
+    for quote in quotes:
+        author_name = quote["author"]
+        author = authors_collection.find_one({"fullname": author_name})
+        if author:
+            tags = [Tag(name=tag_name) for tag_name in quote["tags"]]
+            quote_record = Quote(
+                author=author_name,
+                quote=quote["quote"],
+                tags=tags
+            )
+            quote_record.save
 
 
 def seed_mongo_db():
@@ -45,3 +50,7 @@ def seed_mongo_db():
     quotes_data = read_json_data(quotes_file_path)
 
     save_data_to_mongodb(authors_data, quotes_data, client)
+
+
+if __name__ == "__main__":
+    seed_mongo_db()
