@@ -29,7 +29,7 @@ def detail_author(request, author_id):
 
 def tag(request):
     if request.user.is_authenticated == False:
-        messages.error(request, 'You don\'t have permission to manage tags.')
+        messages.error(request, "You don't have permission to manage tags.")
         return redirect(to='quoweb:main')
 
     if request.method == 'POST':
@@ -83,7 +83,7 @@ def quote(request):
 
 
 def scrape_data(request):
-    if request.user.is_authenticated == False:
+    if not request.user.is_authenticated:
         messages.error(request, 'You don\'t have permission to manage quotes.')
         return redirect(to='quoweb:main')
 
