@@ -15,24 +15,11 @@
  ```
  pip install psycopg2 
  ```
-4. ** W pliku settings wkleić
-```
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '567234',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
-```
-5. **
+4. **
  ```
 python manage.py migrate 
  ```
-6. **
- ```
+5. **
+```
 python manage.py runserver
 ```
