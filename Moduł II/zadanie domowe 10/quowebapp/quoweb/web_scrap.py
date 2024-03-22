@@ -54,8 +54,3 @@ def data():
     process.crawl(QuotesSpider)
     process.start()
     return results_authors, results_quotes
-
-
-# if __name__ == "__main__":
-#     authors, quotes = data()
-#     print(authors)
