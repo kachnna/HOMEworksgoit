@@ -8,18 +8,13 @@
   ```
 2. **
   ```
-  uvicorn main:app --host localhost --port 8000 --reload 
-
+alembic upgrade head 
   ```
 3. **
  ```
- 
+ alembic revision --autogenerate -m 'Init'
  ```
 4. **
  ```
-
+  uvicorn main:app --host localhost --port 8000 --reload 
  ```
-5. **
-```
-
-```
