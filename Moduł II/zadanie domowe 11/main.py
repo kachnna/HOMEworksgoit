@@ -10,4 +10,4 @@ app.include_router(contacts.router, prefix='/api')
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello in my application!"}
+    return {"message": "Welcome in my application!"}
