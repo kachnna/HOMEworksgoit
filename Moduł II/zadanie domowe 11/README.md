@@ -39,7 +39,8 @@ alembic upgrade head
   "notes": "string"
 }
 
- ``` ```
+ ```
+ ```
 {
   "name": "Alice",
   "lastname": "Johnson",
@@ -48,7 +49,8 @@ alembic upgrade head
   "birthday": "1978-06-30",
   "notes": "string"
 }
- ``` ```
+```
+```
 {
   "name": "Bob",
   "lastname": "Brown",
