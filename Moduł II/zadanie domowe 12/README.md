@@ -66,15 +66,16 @@ alembic upgrade head
 {
   "username": "john_doe",
   "email": "john.doe@example.com",
-  "password": "SecurePass123!"
+  "password": "Secure123!"
 }
+
 
  ```
  ```
 {
   "username": "alice_j",
   "email": "alice.johnson@example.org",
-  "password": "Passw0rd123!"
+  "password": "Pass123!"
 }
 
  ```
@@ -82,7 +83,7 @@ alembic upgrade head
 {
   "username": "bob_b",
   "email": "bob.brown@example.net",
-  "password": "BrownPass@456"
+  "password": "Brown456"
 }
 
 ```
@@ -90,8 +91,9 @@ alembic upgrade head
 {
   "username": "jane_s",
   "email": "jane.smith@emailprovider.com",
-  "password": "SmithPass#123"
+  "password": "Smith123"
 }
+
 
  ```
 
