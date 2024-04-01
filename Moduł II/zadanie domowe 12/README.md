@@ -61,3 +61,37 @@ alembic upgrade head
 }
 
  ```
+5. ** create test users
+ ```
+{
+  "username": "kate_davis",
+  "email": "kate.davis@example.com",
+  "password": "MyPassw0rd2024"
+}
+
+ ```
+ ```
+{
+  "username": "john_doe",
+  "email": "john.doe@example.com",
+  "password": "SecurePass123!"
+}
+
+ ```
+ ```
+{
+  "username": "emma_wilson",
+  "email": "emma.wilson@example.com",
+  "password": "Password123#"
+}
+
+```
+```
+{
+  "username": "alex_smith",
+  "email": "alex.smith@example.com",
+  "password": "StrongSecret@123"
+}
+
+ ```
+
