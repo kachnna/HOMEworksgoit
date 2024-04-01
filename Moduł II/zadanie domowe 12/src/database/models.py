@@ -12,10 +12,13 @@ class Contact(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(25), nullable=False)
     lastname = Column(String(50), nullable=False)
-    email = Column(String(100), nullable=True)
+    email = Column(String(250), nullable=False)
     phone = Column(String(15), nullable=True)
     birthday = Column(Date, nullable=True)
     notes = Column(String(500), nullable=True)
+    user_id = Column('user_id', ForeignKey(
+        'users.id', ondelete='CASCADE'), default=None)
+    user = relationship('User', backref="tags")
 
 
 class User(Base):

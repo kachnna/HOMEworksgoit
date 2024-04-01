@@ -52,13 +52,6 @@ class ContactUpdate(BaseModel):
         return birthday_date
 
 
-class ContactDelete(ContactIn):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 class UserIn(BaseModel):
     username: str = Field(min_length=5, max_length=16)
     email: str
