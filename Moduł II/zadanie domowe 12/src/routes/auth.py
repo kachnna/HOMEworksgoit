@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from src.database.db import get_db
 from src.schemas import UserIn, UserOut, TokenModel
 from src.repository import users as repository_users
-from src.services.authorization import auth_service
+from src.services.auth import auth_service
 
 router = APIRouter(prefix='/auth', tags=["auth"])
 security = HTTPBearer()
@@ -33,7 +33,6 @@ async def login(body: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
     if not auth_service.verify_password(body.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password")
-    # Generate JWT
     access_token = await auth_service.create_access_token(data={"sub": user.username})
     refresh_token = await auth_service.create_refresh_token(data={"sub": user.username})
     await repository_users.update_token(user, refresh_token, db)

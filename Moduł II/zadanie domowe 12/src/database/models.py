@@ -4,7 +4,6 @@ from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Date, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
-
 Base = declarative_base()
 
 
