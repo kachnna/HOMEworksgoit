@@ -1,0 +1,6 @@
+{% extends "quoweb/base.html" %} {% load extract_tags %} {% block content %}
+
+<h1>{{author.fullname}}</h1>
+<p><b>{{author.born_date}} {{author.born_location}}</b></p>
+<p><small>{{author.description}}</small></p>
+{% endblock %}

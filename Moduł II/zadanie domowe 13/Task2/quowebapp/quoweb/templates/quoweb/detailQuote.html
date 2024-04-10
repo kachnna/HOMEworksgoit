@@ -1,0 +1,11 @@
+{% extends "quoweb/base.html" %} {% load extract_tags %} {% block content %}
+
+<h1>{{quote.quote}}</h1>
+<p>
+  Author:
+  <a href="{% url 'quoweb:detail_author' quote.author.id %}">
+    {{ quote.author.fullname }}
+  </a>
+</p>
+<p>Tags: <small> {{ quote.tags|tags }} </small></p>
+{% endblock %}

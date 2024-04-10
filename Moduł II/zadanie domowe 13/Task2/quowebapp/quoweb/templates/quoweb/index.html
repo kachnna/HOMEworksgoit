@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>QuoWeb</title>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.amber.min.css"
+    />
+  </head>
+  <body>
+    <main class="container">
+      <nav
+        style="
+          margin-bottom: 20px;
+          border-bottom: 2px solid;
+          padding-left: 30px;
+        "
+      >
+        {% if user.is_authenticated %}
+        <ul>
+          <li>
+            <a href="{% url 'quoweb:quote' %}" role="button">Add Quote</a>
+          </li>
+          <li>
+            <a href="{% url 'quoweb:author' %}" role="button">Add Author</a>
+          </li>
+          <li><a href="{% url 'quoweb:tag' %}" role="button">Add Tag</a></li>
+          <li>
+            <a href="{% url 'quoweb:scrape_data' %}" role="button"
+              >Import Data</a
+            >
+          </li>
+        </ul>
+        <ul>
+          <li>Welcome <b>{{ user.username }}!</b></li>
+          <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
+          <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+        </ul>
+        {% endif %}
+      </nav>
+
+      {% for q in page_obj %}
+      <ul>
+        <li>
+          <a
+            href="{% url 'quoweb:detail_quote' q.id %}"
+            style="color: white; font-style: italic"
+            >{{ q.quote }}</a
+          >
+        </li>
+      </ul>
+      {% endfor %} {% if page_obj.has_previous %}
+      <a href="?page=1" role="button">&laquo; first</a>
+      <a href="?page={{ page_obj.previous_page_number }}" role="button"
+        >previous</a
+      >
+      {% endif %} {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" role="button">next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" role="button"
+        >last &raquo;</a
+      >
+      {% endif %}
+    </main>
+  </body>
+</html>
