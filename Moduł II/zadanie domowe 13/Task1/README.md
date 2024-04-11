@@ -9,9 +9,27 @@ docker-compose up -d
 ```
 
 2. \*\*
+   Create file env example
 
 ```
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=567234
+POSTGRES_PORT=5432
 
+SQLALCHEMY_DATABASE_URL=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_DB}
+
+SECRET_KEY=secret_key
+ALGORITHM=HS256
+
+MAIL_USERNAME=example@meta.ua
+MAIL_PASSWORD=secretPassword
+MAIL_FROM=example@meta.ua
+MAIL_PORT=465
+MAIL_SERVER=smtp.meta.ua
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
 ```
 
 3. \*\*
