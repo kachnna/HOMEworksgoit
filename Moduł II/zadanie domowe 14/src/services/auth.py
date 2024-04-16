@@ -10,6 +10,9 @@ from src.repository import users as repository_users
 from src.conf.config import settings
 import redis as redis
 import pickle
+import bcrypt
+
+# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class Auth:
@@ -20,10 +23,12 @@ class Auth:
     r = redis.Redis(host=settings.redis_host, port=settings.redis_port, db=0)
 
     def verify_password(self, plain_password, hashed_password):
-        return self.pwd_context.verify(plain_password, hashed_password)
+        # return self.pwd_context.verify(plain_password, hashed_password)
+        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
     def get_password_hash(self, password: str):
-        return self.pwd_context.hash(password)
+        # return self.pwd_context.hash(password)
+        return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
     async def create_access_token(self, data: dict, expires_delta: Optional[float] = None):
         to_encode = data.copy()

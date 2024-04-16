@@ -27,7 +27,7 @@ class TestUsers(unittest.IsolatedAsyncioTestCase):
     async def test_create_user(self):
         body = UserIn(
             username="kachnna",
-            email="sara486@.pl",
+            email="",
             password=""
         )
         result = await create_user(body=body, db=self.session)
